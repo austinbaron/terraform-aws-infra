@@ -66,7 +66,7 @@ variable "public_route_table_name" {
 }
 
 variable "private_route_table_name" {
-  default = "BARON-Private-Route-Table"
+  default = "AUSTIN-Private-Route-Table"
   description = "private_route_table_name"
   type = string
 }
@@ -90,7 +90,7 @@ variable "nat_gateway_name" {
   description = "nat_gateway_name"
   type = string
 
-  
+
 }
 
 
