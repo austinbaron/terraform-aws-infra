@@ -19,25 +19,9 @@ resource "aws_route_table_association" "public_subnet_association" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-# Create an Elastic IP for NAT Gateway
-resource "aws_eip" "nat_eip" {
-  vpc = true
-  tags = {
-    Name = var.nat_eip_name
-  }
-}
-
-# Create a NAT Gateway
-resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_subnet.id
-  tags = {
-    Name = var.nat_gateway_name
-  }
-}
 
 # Create a Route Table for Private Subnet
-resource "aws_route_table" "private_rt" {
+resource "aws_route_table" "private_table" {
   vpc_id = aws_vpc.main_vpc.id
   tags = {
     Name = var.private_route_table_name
@@ -55,4 +39,22 @@ resource "aws_route" "private_route" {
 resource "aws_route_table_association" "private_subnet_association" {
   subnet_id      = aws_subnet.private_subnet.id
   route_table_id = aws_route_table.private_rt.id
+
+# ✅ Create a Route Table
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.ecs_vpc.id
+}
+
+# ✅ Create a Route to Internet
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_route_table.public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
+# ✅ Associate Route Table with Subnet
+resource "aws_route_table_association" "public_association" {
+  subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.public_rt.id
+ }
 }
