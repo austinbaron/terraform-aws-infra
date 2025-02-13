@@ -38,17 +38,6 @@ resource "aws_eip" "nat_eip" {
 }
 
 
-# ✅ Create a Public Subnet
-resource "aws_subnet2" "public_subnet2" {
-  vpc_id            = aws_vpc.ecs_vpc.id
-  cidr_block        = var.subnet_cidr
-  availability_zone = "us-east-1a"
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "Public-Subnet"
-  }
-}
 
 
 
